@@ -13,7 +13,7 @@ def parser(file_path):
     # 初始化robot suite
     test_suite_name = os.path.basename(file_path).split('.')[0]
     suite = TestSuite(test_suite_name)
-    suite.resource.imports.library('TestLibrary')
+    suite.resource.imports.library('ApolloLibrary')
 
     g = graphml.read_graphml(file_path)
     e = [e for e in g.edges_iter()]
@@ -26,8 +26,9 @@ def parser(file_path):
 
     # 获取所有反向路径
     for edge in e:
-        if edge[0] >= edge[1]:
+        if int(edge[0].replace('n', '')) >= int(edge[1].replace('n', '')):
             revers_paths.append(edge)
+            print edge[0], edge[1]
 
     # 遍历反向路径
     if len(revers_paths) > 0:
@@ -48,12 +49,31 @@ def parser(file_path):
             prev_node = exec_path[i]
             next_node = exec_path[i+1]
             if str(nodes[prev_node]['label']).lower() == 'start':
-                test.keywords.create(edges['n0'][next_node]['label'])
-                test.keywords.create(nodes[next_node]['label'])
+                test.keywords.create('Log', args=['测试开始'.decode('utf-8')])
+                e_label = edges['n0'][next_node]['label']
+                if len(e_label.split('/')) > 1:
+                    test.keywords.create(e_label.split('/')[0], args=[e_label.split('/')[1]])
+                else:
+                    test.keywords.create(edges['n0'][next_node]['label'])
+                test.keywords.create('Log', args=['当前的节点为: {}'.format(next_node).decode('utf-8')])
+                n_label = nodes[next_node]['label']
+                if len(n_label.split('/')) > 1:
+                    test.keywords.create(n_label.split('/')[0], args=[n_label.split('/')[1]])
+                else:
+                    test.keywords.create(n_label)
             else:
-                test.keywords.create(nodes[prev_node]['label'])
-                test.keywords.create(edges[prev_node][next_node]['label'])
-                test.keywords.create(nodes[next_node]['label'])
+                test.keywords.create('Log', args=['当前的向量为: {}'.format(edges[prev_node][next_node]['id']).decode('utf-8')])
+                e_label = edges[prev_node][next_node]['label']
+                if len(e_label.split('/')) > 1:
+                    test.keywords.create(e_label.split('/')[0], args=[e_label.split('/')[1]])
+                else:
+                    test.keywords.create(e_label)
+                test.keywords.create('Log', args=['当前的节点为: {}'.format(next_node).decode('utf-8')])
+                n_label = nodes[next_node]['label']
+                if len(n_label.split('/')) > 1:
+                    test.keywords.create(n_label.split('/')[0], args=[n_label.split('/')[1]])
+                else:
+                    test.keywords.create(n_label)
 
     # 运行suite并回收报告
     suite.run(output='../results/{}.xml'.format(test_suite_name))
@@ -64,7 +84,7 @@ def parser(file_path):
                        , output='../reports/{}_output.xml'.format(test_suite_name))
 
 if __name__ == '__main__':
-    input_file = raw_input('input path or file: ')
+    input_file = raw_input('input model path or file: ')
     if isfile(input_file):
         parser(input_file)
     else:
