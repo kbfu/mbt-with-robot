@@ -25,16 +25,17 @@ def parser(file_path):
     exec_paths = []
 
     # 获取所有反向路径
-    for edge in e:
-        if int(edge[0].replace('n', '')) >= int(edge[1].replace('n', '')):
-            revers_paths.append(edge)
-            print edge[0], edge[1]
+    for edge1 in e:
+        for edge2 in e:
+            if edge1[0] == edge2[1] and edge1[1] == edge2[0]:
+                revers_paths.append(edge1)
 
     # 遍历反向路径
     if len(revers_paths) > 0:
         for revers_path in revers_paths:
             for path in nx.all_simple_paths(g, 'n0', revers_path[0]):
-                exec_paths.append(path + [revers_path[1]])
+                if path[-2] == revers_path[1]:
+                    exec_paths.append(path + [revers_path[1]])
 
     # 搜寻所有的末端路径
     for node in n:
