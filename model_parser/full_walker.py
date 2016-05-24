@@ -87,9 +87,9 @@ def full_walker(file_path):
 if __name__ == '__main__':
     input_file = raw_input('input model path or file: ')
     if isfile(input_file):
-        full_parser(input_file)
+        full_walker(input_file)
     else:
         model_files = [join(input_file, f)
                        for f in listdir(input_file) if isfile(join(input_file, f))]
         for model_file in model_files:
-            full_parser(model_file)
+            full_walker(model_file)
