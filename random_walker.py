@@ -91,7 +91,7 @@ def random_walker(file_path, coverage):
 if __name__ == '__main__':
     # 判断命令行参数
     if '--help' in sys.argv:
-        print 'example: python random_walker --coverage 100 --modelpath abc.graphml'
+        print 'example: python random_walker.py --coverage 100 --modelpath abc.graphml'
         sys.exit()
     elif '--coverage' not in sys.argv or '--modelpath' not in sys.argv:
         print 'need coverage and modelpath parameters'
