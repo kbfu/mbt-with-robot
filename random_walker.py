@@ -45,7 +45,7 @@ def random_walker(file_path, coverage):
             exec_paths = sorted(exec_paths)
             exec_paths = [exec_paths[i] for i in range(len(exec_paths)) if i == 0 or exec_paths[i] != exec_paths[i-1]]
             curr_nodes = list(set([item for sub_list in exec_paths for item in sub_list]))
-            now_coverage = (len(curr_nodes)/len(n))*100
+            now_coverage = float(len(curr_nodes))/float(len(n))*100
 
     # 整合成robot suite
     for exec_path in exec_paths:
@@ -81,57 +81,58 @@ def random_walker(file_path, coverage):
                     test.keywords.create(n_label)
 
     # 运行suite并回收报告
-    suite.run(output='../results/{}.xml'.format(test_suite_name))
-    xml_files = [join('../results/', f) for f in os.listdir('../results/') if isfile(join('../results/', f))]
+    suite.run(output='results/{}.xml'.format(test_suite_name))
+    xml_files = [join('results/', f) for f in os.listdir('results/') if isfile(join('results/', f))]
     ResultWriter(*xml_files) \
-        .write_results(log='../reports/{}_log.html'.format(test_suite_name)
-                       , report='../reports/{}_report.html'.format(test_suite_name)
-                       , output='../reports/{}_output.xml'.format(test_suite_name))
+        .write_results(log='reports/{}_log.html'.format(test_suite_name)
+                       , report='reports/{}_report.html'.format(test_suite_name)
+                       , output='reports/{}_output.xml'.format(test_suite_name))
 
 if __name__ == '__main__':
+    random_walker('models/CrowdOptionalPush.graphml', 10)
     # 判断命令行参数
-    if '--help' in sys.argv:
-        print 'example: python random_walker.py --coverage 100 --modelpath abc.graphml'
-        sys.exit()
-    elif '--coverage' not in sys.argv or '--modelpath' not in sys.argv:
-        print 'need coverage and modelpath parameters'
-        sys.exit()
-    else:
-        for i in range(len(sys.argv)):
-            if sys.argv[i] == '--coverage':
-                try:
-                    coverage = sys.argv[i + 1]
-                except IndexError:
-                    print 'please give a value to --coverage parameter'
-                    sys.exit()
-                if str(sys.argv[i + 1]).startswith('--'):
-                    print 'please give a value to --coverage parameter'
-                    sys.exit()
-                try:
-                    coverage = int(coverage)
-                except ValueError:
-                    print 'the value given for coverage is not a number'
-                    sys.exit()
-                if coverage not in range(1, 101):
-                    print 'the value given for coverage should be in 1 to 100'
-                    sys.exit()
-            elif sys.argv[i] == '--modelpath':
-                try:
-                    model_path = sys.argv[i + 1]
-                except IndexError:
-                    print 'please give a value to --modelpath parameter'
-                    sys.exit()
-                if str(sys.argv[i + 1]).startswith('--'):
-                    print 'please give a value to --modelpath parameter'
-                    sys.exit()
-                if os.path.exists(model_path) is False:
-                    print "modelpath doesn't exist"
-                    sys.exit()
-
-        if isfile(model_path):
-            random_walker(model_path, coverage)
-        else:
-            model_files = [join(model_path, f)
-                           for f in listdir(model_path) if isfile(join(model_path, f))]
-            for model_file in model_files:
-                random_walker(model_file, coverage)
+    # if '--help' in sys.argv:
+    #     print 'example: python random_walker.py --coverage 100 --modelpath abc.graphml'
+    #     sys.exit()
+    # elif '--coverage' not in sys.argv or '--modelpath' not in sys.argv:
+    #     print 'need coverage and modelpath parameters'
+    #     sys.exit()
+    # else:
+    #     for i in range(len(sys.argv)):
+    #         if sys.argv[i] == '--coverage':
+    #             try:
+    #                 coverage = sys.argv[i + 1]
+    #             except IndexError:
+    #                 print 'please give a value to --coverage parameter'
+    #                 sys.exit()
+    #             if str(sys.argv[i + 1]).startswith('--'):
+    #                 print 'please give a value to --coverage parameter'
+    #                 sys.exit()
+    #             try:
+    #                 coverage = int(coverage)
+    #             except ValueError:
+    #                 print 'the value given for coverage is not a number'
+    #                 sys.exit()
+    #             if coverage not in range(1, 101):
+    #                 print 'the value given for coverage should be in 1 to 100'
+    #                 sys.exit()
+    #         elif sys.argv[i] == '--modelpath':
+    #             try:
+    #                 model_path = sys.argv[i + 1]
+    #             except IndexError:
+    #                 print 'please give a value to --modelpath parameter'
+    #                 sys.exit()
+    #             if str(sys.argv[i + 1]).startswith('--'):
+    #                 print 'please give a value to --modelpath parameter'
+    #                 sys.exit()
+    #             if os.path.exists(model_path) is False:
+    #                 print "modelpath doesn't exist"
+    #                 sys.exit()
+    #
+    #     if isfile(model_path):
+    #         random_walker(model_path, coverage)
+    #     else:
+    #         model_files = [join(model_path, f)
+    #                        for f in listdir(model_path) if isfile(join(model_path, f))]
+    #         for model_file in model_files:
+    #             random_walker(model_file, coverage)
