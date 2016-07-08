@@ -4,4 +4,4 @@
 
 > Model based testing, all cases are generated in real time.
 
-> Example to run the random_walker: python random_walker --coverage 100 --modelpath abc.graphml
+> Run 'python random_walker.py --help' to checkout the command options.
