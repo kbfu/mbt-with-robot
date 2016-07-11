@@ -1,4 +1,4 @@
-## Deprecrated, please check HybridTest.
+## Deprecated, please check HybridTest.
 
 # mbt-with-robot
 
