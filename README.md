@@ -1,3 +1,5 @@
+## Deprecrated, please check HybridTest.
+
 # mbt-with-robot
 
 > Inspired by graphwalker, and use Robot Framework to run the test and generate the log.
